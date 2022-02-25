@@ -13,7 +13,7 @@ contract HotDog is ERC20("HotDog", "HOTDOG"), Ownable {
 
     address public freezerAddress;
     address public hotDoggeriaAddress;
-    address public chefAddress;
+    address public foodTruckAddress;
     address public upgradeAddress;
 
     bool public promotionalHotDogMinted = false;
@@ -44,9 +44,12 @@ contract HotDog is ERC20("HotDog", "HOTDOG"), Ownable {
      * chef consumes hot dog
      * chef address can only be set once
      */
-    function setChefAddress(address _chefAddress) external onlyOwner {
-        require(address(chefAddress) == address(0), "chef address already set");
-        chefAddress = _chefAddress;
+    function setFoodTruckAddress(address _foodTruckAddress) external onlyOwner {
+        require(
+            address(foodTruckAddress) == address(0),
+            "food truck address already set"
+        );
+        foodTruckAddress = _foodTruckAddress;
     }
 
     function mintPromotionalHotDog(address _to) external onlyOwner {
@@ -79,7 +82,7 @@ contract HotDog is ERC20("HotDog", "HOTDOG"), Ownable {
     function mint(address _to, uint256 _amount) external {
         require(
             hotDoggeriaAddress != address(0) &&
-                chefAddress != address(0) &&
+                foodTruckAddress != address(0) &&
                 freezerAddress != address(0) &&
                 upgradeAddress != address(0),
             "missing initial requirements"
@@ -93,13 +96,13 @@ contract HotDog is ERC20("HotDog", "HOTDOG"), Ownable {
 
     function burn(address _from, uint256 _amount) external {
         require(
-            chefAddress != address(0) &&
+            foodTruckAddress != address(0) &&
                 freezerAddress != address(0) &&
                 upgradeAddress != address(0),
             "missing initial requirements"
         );
         require(
-            _msgSender() == chefAddress ||
+            _msgSender() == foodTruckAddress ||
                 _msgSender() == freezerAddress ||
                 _msgSender() == upgradeAddress,
             "msgsender does not have permission"
