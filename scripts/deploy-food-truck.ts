@@ -16,7 +16,7 @@ async function main() {
   // We get the contract to deploy
   const FoodTruck = await ethers.getContractFactory("FoodTruck");
   const foodTruck = await FoodTruck.deploy(
-    "0xe0533D416056d8998BA0D81c5DcF75310E25291e",
+    "0x5355b99757A5bBDfCF88e4eDB2642067c35A6232",
     "0x50492D9c6B5cEe195fF89fee881b50Ff63F7CaD4",
     "https://my-nft-minter.vercel.app/metadata"
   );
