@@ -86,7 +86,7 @@ contract FoodTruck is ERC721Enumerable, Ownable, Pausable {
         HotDog _hotDog,
         address _foodTruckTypeOracleAddress,
         string memory _BASE_URI
-    ) ERC721("HotDog Game Food Trucks", "HOTDOG-GAME-FOOD-TRUCK") {
+    ) ERC721("HotDog Game FoodTrucks", "HOTDOG-GAME-FOODTRUCK") {
         require(address(_hotDog) != address(0));
         require(_foodTruckTypeOracleAddress != address(0));
 
