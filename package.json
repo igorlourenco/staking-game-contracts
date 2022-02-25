@@ -4,7 +4,8 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "deploy:hotdog": "yarn hardhat run --network avax-testnet scripts/deploy-hotdog.ts"
+    "deploy:hotdog": "yarn hardhat run --network avax-testnet scripts/deploy-hotdog.ts",
+    "deploy:foodtruck": "yarn hardhat run --network avax-testnet scripts/deploy-food-truck.ts"
   },
   "devDependencies": {
     "@nomiclabs/hardhat-ethers": "^2.0.0",
