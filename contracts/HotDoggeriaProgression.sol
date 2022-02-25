@@ -34,7 +34,7 @@ contract HotDoggeriaProgression is Context, Ownable, Pausable {
     uint256 public constant BURN_ID = 0;
     uint256 public constant FATIGUE_ID = 1;
     uint256 public constant FREEZER_ID = 2;
-    uint256 public constant MASTERCHEF_ID = 3;
+    uint256 public constant MASTER_FOOD_TRUCK_ID = 3;
     uint256 public constant UPGRADES_ID = 4;
     uint256 public constant FOOD_TRUCKS_ID = 5;
     uint256 public constant BASE_COST_RESPEC = 50 * 1e18;
@@ -138,15 +138,17 @@ contract HotDoggeriaProgression is Context, Ownable, Pausable {
     /**
      * Returns the multiplier for $PIZZA production based on the number of masterchefs and the skill points spent
      */
-    function getMasterChefSkillModifier(
+    function getMasterFoodTruckSkillModifier(
         address _owner,
-        uint256 _masterChefNumber
+        uint256 _masterFoodTruckNumber
     ) public view returns (uint256) {
-        uint256 masterChefSkill = skillsLearned[_owner][MASTERCHEF_ID];
+        uint256 masterFoodTruckSkill = skillsLearned[_owner][
+            MASTER_FOOD_TRUCK_ID
+        ];
 
-        if (masterChefSkill == 2 && _masterChefNumber >= 5) {
+        if (masterFoodTruckSkill == 2 && _masterFoodTruckNumber >= 5) {
             return 110;
-        } else if (masterChefSkill >= 1 && _masterChefNumber >= 2) {
+        } else if (masterFoodTruckSkill >= 1 && _masterFoodTruckNumber >= 2) {
             return 103;
         } else {
             return 100;
@@ -246,7 +248,7 @@ contract HotDoggeriaProgression is Context, Ownable, Pausable {
             uint256 burn,
             uint256 fatigue,
             uint256 freezer,
-            uint256 masterchef,
+            uint256 masterFoodTruck,
             uint256 upgrades,
             uint256 foodTrucks
         )
@@ -256,7 +258,7 @@ contract HotDoggeriaProgression is Context, Ownable, Pausable {
         burn = skills[BURN_ID];
         fatigue = skills[FATIGUE_ID];
         freezer = skills[FREEZER_ID];
-        masterchef = skills[MASTERCHEF_ID];
+        masterFoodTruck = skills[MASTER_FOOD_TRUCK_ID];
         upgrades = skills[UPGRADES_ID];
         foodTrucks = skills[FOOD_TRUCKS_ID];
     }
@@ -333,7 +335,7 @@ contract HotDoggeriaProgression is Context, Ownable, Pausable {
         skillsLearned[_msgSender()][BURN_ID] = 0;
         skillsLearned[_msgSender()][FATIGUE_ID] = 0;
         skillsLearned[_msgSender()][FREEZER_ID] = 0;
-        skillsLearned[_msgSender()][MASTERCHEF_ID] = 0;
+        skillsLearned[_msgSender()][MASTER_FOOD_TRUCK_ID] = 0;
         skillsLearned[_msgSender()][UPGRADES_ID] = 0;
         skillsLearned[_msgSender()][FOOD_TRUCKS_ID] = 0;
 
