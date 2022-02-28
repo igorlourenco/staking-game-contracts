@@ -71,6 +71,20 @@ async function main() {
   await upgrade.deployed();
 
   console.log("Upgrade deployed to:", upgrade.address);
+
+  // deploy HotDoggeria
+  const HotDoggeria = await ethers.getContractFactory("HotDoggeria");
+  const hotDoggeria = await HotDoggeria.deploy(
+    foodTruck.address,
+    upgrade.address,
+    hotDog.address,
+    juice.address,
+    freezer.address
+  );
+
+  await hotDoggeria.deployed();
+
+  console.log("HotDoggeria deployed to:", hotDoggeria.address);
 }
 
 main().catch((error) => {
