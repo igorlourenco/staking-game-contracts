@@ -28,6 +28,14 @@ async function main() {
   await freezer.deployed();
 
   console.log("Freezer deployed to:", freezer.address);
+
+  // deploy Juice
+  const Juice = await ethers.getContractFactory("Juice");
+  const juice = await Juice.deploy();
+
+  await juice.deployed();
+
+  console.log("Juice deployed to:", juice.address);
 }
 
 main().catch((error) => {
