@@ -14,7 +14,7 @@ async function main() {
   const foodTruck = await FoodTruck.deploy(
     hotDog.address,
     "0x50492D9c6B5cEe195fF89fee881b50Ff63F7CaD4",
-    "https://my-nft-minter.vercel.app/metadata"
+    "https://my-nft-minter.vercel.app/metadata/foodtruck"
   );
 
   await foodTruck.deployed();
@@ -59,6 +59,18 @@ async function main() {
     "HotDoggeriaProgression deployed to:",
     hotDoggeriaProgression.address
   );
+
+  // deploy Upgrade
+  const Upgrade = await ethers.getContractFactory("Upgrade");
+  const upgrade = await Upgrade.deploy(
+    hotDog.address,
+    juice.address,
+    "https://my-nft-minter.vercel.app/metadata/upgrade"
+  );
+
+  await upgrade.deployed();
+
+  console.log("Upgrade deployed to:", upgrade.address);
 }
 
 main().catch((error) => {

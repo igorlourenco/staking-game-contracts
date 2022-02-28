@@ -15,3 +15,6 @@ JuiceFountain=0x23B4E477f9845F62cA8cADb3DC49874904F1c824
 
 HotDoggeriaProgression=0xb9d83F322d64Ab472AbcDBf41C185efB108F39de
 // yarn hardhat verify --network avax-testnet 0xb9d83F322d64Ab472AbcDBf41C185efB108F39de "0xe49f90fb525bC39a9B84FfcCf78F61A759960e75"
+
+Upgrade=0x8f81479fBf72D53b9A64C45db928b0Bb332003C2
+// yarn hardhat verify --network avax-testnet 0x8f81479fBf72D53b9A64C45db928b0Bb332003C2 "0x49207Fcdd39E79253f68c2fD92dDd167E4Bda299" "0xe49f90fb525bC39a9B84FfcCf78F61A759960e75" "https://my-nft-minter.vercel.app/metadata/upgrade"

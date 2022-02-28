@@ -10,7 +10,8 @@
     "deploy:freezer": "yarn hardhat run --network avax-testnet scripts/deploy/freezer.ts",
     "deploy:juice": "yarn hardhat run --network avax-testnet scripts/deploy/juice.ts",
     "deploy:juicefountain": "yarn hardhat run --network avax-testnet scripts/deploy/juice-fountain.ts",
-    "deploy:hotdoggeriaprogression": "yarn hardhat run --network avax-testnet scripts/deploy/hot-doggeria-progression.ts"
+    "deploy:hotdoggeriaprogression": "yarn hardhat run --network avax-testnet scripts/deploy/hot-doggeria-progression.ts",
+    "deploy:upgrade": "yarn hardhat run --network avax-testnet scripts/deploy/upgrade.ts"
   },
   "devDependencies": {
     "@nomiclabs/hardhat-ethers": "^2.0.0",
