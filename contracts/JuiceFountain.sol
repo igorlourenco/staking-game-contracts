@@ -10,7 +10,7 @@ import "./libraries/BoringERC20.sol";
 
 // Adapted from MasterChefJoeV2 and Police And Thieves Vault
 // Added a variable reward rate based on the total LP staked
-contract SodaFountain is Ownable, Pausable, ReentrancyGuard {
+contract JuiceFountain is Ownable, Pausable, ReentrancyGuard {
     using SafeMath for uint256;
     using BoringERC20 for IERC20;
 

@@ -5,11 +5,11 @@ import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Capped.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
 // Supply cap of 15,000,000
-contract Soda is ERC20Capped(15_000_000 * 1e18), Ownable {
+contract Juice is ERC20Capped(15_000_000 * 1e18), Ownable {
     address public upgradeAddress;
     address public hotDoggeriaAddress;
 
-    constructor() ERC20("Soda", "SODA") {}
+    constructor() ERC20("Juice", "JUICE") {}
 
     function setUpgradeAddress(address _upgradeAddress) external onlyOwner {
         upgradeAddress = _upgradeAddress;
