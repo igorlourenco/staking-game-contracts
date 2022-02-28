@@ -44,6 +44,21 @@ async function main() {
   await juiceFountain.deployed();
 
   console.log("JuiceFountain deployed to:", juiceFountain.address);
+
+  // deploy HotDoggeriaProgression
+  const HotDoggeriaProgression = await ethers.getContractFactory(
+    "HotDoggeriaProgression"
+  );
+  const hotDoggeriaProgression = await HotDoggeriaProgression.deploy(
+    juice.address
+  );
+
+  await hotDoggeriaProgression.deployed();
+
+  console.log(
+    "HotDoggeriaProgression deployed to:",
+    hotDoggeriaProgression.address
+  );
 }
 
 main().catch((error) => {
