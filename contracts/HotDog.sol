@@ -7,7 +7,7 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 contract HotDog is ERC20("HotDog", "HOTDOG"), Ownable {
     uint256 public constant ONE_HOTDOG = 1e18;
     uint256 public constant NUM_PROMOTIONAL_HOTDOG = 500_000;
-    uint256 public constant NUM_HOTDOG_SODA_LP = 20_000_000;
+    uint256 public constant NUM_HOTDOG_JUICE_LP = 20_000_000;
 
     uint256 public NUM_HOTDOG_AVAX_LP = 30_000_000;
 
@@ -18,7 +18,7 @@ contract HotDog is ERC20("HotDog", "HOTDOG"), Ownable {
 
     bool public promotionalHotDogMinted = false;
     bool public avaxLPHotDogMinted = false;
-    bool public sodaLPHotDogMinted = false;
+    bool public juiceLPHotDogMinted = false;
 
     // ADMIN
 
@@ -67,10 +67,13 @@ contract HotDog is ERC20("HotDog", "HOTDOG"), Ownable {
         _mint(owner(), NUM_HOTDOG_AVAX_LP * ONE_HOTDOG);
     }
 
-    function mintSodaLPHotDog() external onlyOwner {
-        require(!sodaLPHotDogMinted, "soda hot dog LP has already been minted");
-        sodaLPHotDogMinted = true;
-        _mint(owner(), NUM_HOTDOG_SODA_LP * ONE_HOTDOG);
+    function mintJuiceLPHotDog() external onlyOwner {
+        require(
+            !juiceLPHotDogMinted,
+            "juice hot dog LP has already been minted"
+        );
+        juiceLPHotDogMinted = true;
+        _mint(owner(), NUM_HOTDOG_JUICE_LP * ONE_HOTDOG);
     }
 
     function setNumHotDogAvaxLp(uint256 _numHotDogAvaxLp) external onlyOwner {

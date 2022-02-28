@@ -4,11 +4,11 @@ pragma solidity ^0.8.4;
 import "@openzeppelin/contracts/utils/Context.sol";
 import "@openzeppelin/contracts/security/Pausable.sol";
 
-import "./Soda.sol";
+import "./Juice.sol";
 
 contract HotDoggeriaProgression is Context, Ownable, Pausable {
     // Constants
-    uint256[20] public SODA_LEVELS = [
+    uint256[20] public JUICE_LEVELS = [
         0,
         100 * 1e18,
         250 * 1e18,
@@ -30,7 +30,7 @@ contract HotDoggeriaProgression is Context, Ownable, Pausable {
         9450 * 1e18,
         10450 * 1e18
     ];
-    uint256 public MAX_SODA_AMOUNT = SODA_LEVELS[SODA_LEVELS.length - 1];
+    uint256 public MAX_JUICE_AMOUNT = JUICE_LEVELS[JUICE_LEVELS.length - 1];
     uint256 public constant BURN_ID = 0;
     uint256 public constant FATIGUE_ID = 1;
     uint256 public constant FREEZER_ID = 2;
@@ -40,16 +40,16 @@ contract HotDoggeriaProgression is Context, Ownable, Pausable {
     uint256 public constant BASE_COST_RESPEC = 50 * 1e18;
     uint256[6] public MAX_SKILL_LEVEL = [3, 3, 2, 2, 5, 5];
 
-    Soda public soda;
+    Juice public juice;
 
     uint256 public levelTime;
 
-    mapping(address => uint256) public sodaDeposited; // address => total amount of soda deposited
+    mapping(address => uint256) public juiceDeposited; // address => total amount of juice deposited
     mapping(address => uint256) public skillPoints; // address => skill points available
     mapping(address => uint256[6]) public skillsLearned; // address => skill learned.
 
-    constructor(Soda _soda) {
-        soda = _soda;
+    constructor(Juice _juice) {
+        juice = _juice;
     }
 
     // EVENTS
@@ -61,17 +61,17 @@ contract HotDoggeriaProgression is Context, Ownable, Pausable {
     // Views
 
     /**
-     * Returns the level based on the total soda deposited
+     * Returns the level based on the total juice deposited
      */
     function _getLevel(address _owner) internal view returns (uint256) {
-        uint256 totalSoda = sodaDeposited[_owner];
+        uint256 totalJuice = juiceDeposited[_owner];
 
-        for (uint256 i = 0; i < SODA_LEVELS.length - 1; i++) {
-            if (totalSoda < SODA_LEVELS[i + 1]) {
+        for (uint256 i = 0; i < JUICE_LEVELS.length - 1; i++) {
+            if (totalJuice < JUICE_LEVELS[i + 1]) {
                 return i + 1;
             }
         }
-        return SODA_LEVELS.length;
+        return JUICE_LEVELS.length;
     }
 
     /**
@@ -211,24 +211,24 @@ contract HotDoggeriaProgression is Context, Ownable, Pausable {
     }
 
     /**
-     * Returns the $SODA deposited in the current level
+     * Returns the $JUICE deposited in the current level
      */
-    function getSodaDeposited(address _owner) public view returns (uint256) {
+    function getJuiceDeposited(address _owner) public view returns (uint256) {
         uint256 level = _getLevel(_owner);
-        uint256 totalSoda = sodaDeposited[_owner];
+        uint256 totalJuice = juiceDeposited[_owner];
 
-        return totalSoda - SODA_LEVELS[level - 1];
+        return totalJuice - JUICE_LEVELS[level - 1];
     }
 
     /**
-     * Returns the amount of soda required to level up
+     * Returns the amount of juice required to level up
      */
-    function getSodaToNextLevel(address _owner) public view returns (uint256) {
+    function getJuiceToNextLevel(address _owner) public view returns (uint256) {
         uint256 level = _getLevel(_owner);
-        if (level == SODA_LEVELS.length) {
+        if (level == JUICE_LEVELS.length) {
             return 0;
         }
-        return SODA_LEVELS[level] - SODA_LEVELS[level - 1];
+        return JUICE_LEVELS[level] - JUICE_LEVELS[level - 1];
     }
 
     /**
@@ -266,32 +266,32 @@ contract HotDoggeriaProgression is Context, Ownable, Pausable {
     // External
 
     /**
-     * Burns deposited $SODA and add skill point if level up.
+     * Burns deposited $JUICE and add skill point if level up.
      */
-    function depositSoda(uint256 _amount) external whenNotPaused {
+    function depositJuice(uint256 _amount) external whenNotPaused {
         require(levelStarted(), "You can't level yet");
         require(
-            _getLevel(_msgSender()) < SODA_LEVELS.length,
+            _getLevel(_msgSender()) < JUICE_LEVELS.length,
             "already at max level"
         );
-        require(soda.balanceOf(_msgSender()) >= _amount, "not enough SODA");
+        require(juice.balanceOf(_msgSender()) >= _amount, "not enough JUICE");
 
-        if (_amount + sodaDeposited[_msgSender()] > MAX_SODA_AMOUNT) {
-            _amount = MAX_SODA_AMOUNT - sodaDeposited[_msgSender()];
+        if (_amount + juiceDeposited[_msgSender()] > MAX_JUICE_AMOUNT) {
+            _amount = MAX_JUICE_AMOUNT - juiceDeposited[_msgSender()];
         }
 
         uint256 levelBefore = _getLevel(_msgSender());
-        sodaDeposited[_msgSender()] += _amount;
+        juiceDeposited[_msgSender()] += _amount;
         uint256 levelAfter = _getLevel(_msgSender());
         skillPoints[_msgSender()] += levelAfter - levelBefore;
 
-        if (levelAfter == SODA_LEVELS.length) {
+        if (levelAfter == JUICE_LEVELS.length) {
             skillPoints[_msgSender()] += 1;
         }
 
         emit receivedSkillPoints(_msgSender(), levelAfter - levelBefore);
 
-        soda.burn(_msgSender(), _amount);
+        juice.burn(_msgSender(), _amount);
     }
 
     /**
@@ -328,8 +328,8 @@ contract HotDoggeriaProgression is Context, Ownable, Pausable {
         uint256 costToRespec = level * BASE_COST_RESPEC;
         require(level > 1, "you are still at level 1");
         require(
-            soda.balanceOf(_msgSender()) >= costToRespec,
-            "not enough SODA"
+            juice.balanceOf(_msgSender()) >= costToRespec,
+            "not enough JUICE"
         );
 
         skillsLearned[_msgSender()][BURN_ID] = 0;
@@ -345,7 +345,7 @@ contract HotDoggeriaProgression is Context, Ownable, Pausable {
             skillPoints[_msgSender()]++;
         }
 
-        soda.burn(_msgSender(), costToRespec);
+        juice.burn(_msgSender(), costToRespec);
 
         emit respec(_msgSender(), level);
     }

@@ -95,9 +95,9 @@ contract HotDoggeria is HotDoggeriaProgression, ReentrancyGuard {
         FoodTruck _foodTruck,
         Upgrade _upgrade,
         HotDog _hotDog,
-        Soda _soda,
+        Juice _juice,
         address _freezerAddress
-    ) HotDoggeriaProgression(_soda) {
+    ) HotDoggeriaProgression(_juice) {
         foodTruck = _foodTruck;
         upgrade = _upgrade;
         hotDog = _hotDog;

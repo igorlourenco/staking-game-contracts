@@ -7,7 +7,7 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/security/Pausable.sol";
 
 import "./HotDog.sol";
-import "./Soda.sol";
+import "./Juice.sol";
 
 contract Upgrade is ERC721Enumerable, Ownable, Pausable {
     using SafeERC20 for IERC20;
@@ -24,14 +24,14 @@ contract Upgrade is ERC721Enumerable, Ownable, Pausable {
         uint256 supply;
         uint256 maxSupply;
         uint256 priceHotDog;
-        uint256 priceSoda;
+        uint256 priceJuice;
         uint256 yield;
     }
 
     // Var
 
     HotDog hotDog;
-    Soda soda;
+    Juice juice;
     address public hotDoggeriaAddress;
 
     string public BASE_URI;
@@ -55,11 +55,11 @@ contract Upgrade is ERC721Enumerable, Ownable, Pausable {
 
     constructor(
         HotDog _hotDog,
-        Soda _soda,
+        Juice _juice,
         string memory _BASE_URI
     ) ERC721("HotDog Game FoodTruck Tools", "HOTDOG-GAME-FOODTRUCK-TOOL") {
         hotDog = _hotDog;
-        soda = _soda;
+        juice = _juice;
         BASE_URI = _BASE_URI;
 
         // first three upgrades
@@ -67,21 +67,21 @@ contract Upgrade is ERC721Enumerable, Ownable, Pausable {
             supply: 0,
             maxSupply: 2500,
             priceHotDog: 3000 * 1e18,
-            priceSoda: 50 * 1e18,
+            priceJuice: 50 * 1e18,
             yield: 1
         });
         levels[1] = Level({
             supply: 0,
             maxSupply: 2200,
             priceHotDog: 10000 * 1e18,
-            priceSoda: 80 * 1e18,
+            priceJuice: 80 * 1e18,
             yield: 3
         });
         levels[2] = Level({
             supply: 0,
             maxSupply: 2000,
             priceHotDog: 20000 * 1e18,
-            priceSoda: 110 * 1e18,
+            priceJuice: 110 * 1e18,
             yield: 5
         });
         currentLevelIndex = 2;
@@ -146,7 +146,7 @@ contract Upgrade is ERC721Enumerable, Ownable, Pausable {
     function addLevel(
         uint256 _maxSupply,
         uint256 _priceHotDog,
-        uint256 _priceSoda,
+        uint256 _priceJuice,
         uint256 _yield
     ) external onlyOwner {
         currentLevelIndex++;
@@ -154,7 +154,7 @@ contract Upgrade is ERC721Enumerable, Ownable, Pausable {
             supply: 0,
             maxSupply: _maxSupply,
             priceHotDog: _priceHotDog,
-            priceSoda: _priceSoda,
+            priceJuice: _priceJuice,
             yield: _yield
         });
     }
@@ -163,7 +163,7 @@ contract Upgrade is ERC721Enumerable, Ownable, Pausable {
         uint256 _index,
         uint256 _maxSupply,
         uint256 _priceHotDog,
-        uint256 _priceSoda,
+        uint256 _priceJuice,
         uint256 _yield
     ) external onlyOwner {
         require(_index <= currentLevelIndex, "invalid level");
@@ -171,7 +171,7 @@ contract Upgrade is ERC721Enumerable, Ownable, Pausable {
             supply: 0,
             maxSupply: _maxSupply,
             priceHotDog: _priceHotDog,
-            priceSoda: _priceSoda,
+            priceJuice: _priceJuice,
             yield: _yield
         });
     }
@@ -180,8 +180,8 @@ contract Upgrade is ERC721Enumerable, Ownable, Pausable {
         hotDog = _hotDog;
     }
 
-    function setSoda(Soda _soda) external onlyOwner {
-        soda = _soda;
+    function setJuice(Juice _juice) external onlyOwner {
+        juice = _juice;
     }
 
     function setHotDoggeriaAddress(address _hotDoggeriaAddress)
@@ -235,14 +235,14 @@ contract Upgrade is ERC721Enumerable, Ownable, Pausable {
         );
 
         uint256 transactionCostHotDog = levels[_level].priceHotDog * _qty;
-        uint256 transactionCostSoda = levels[_level].priceSoda * _qty;
+        uint256 transactionCostJuice = levels[_level].priceJuice * _qty;
         require(
             hotDog.balanceOf(_msgSender()) >= transactionCostHotDog,
             "not have enough HOTDOG"
         );
         require(
-            soda.balanceOf(_msgSender()) >= transactionCostSoda,
-            "not have enough SODA"
+            juice.balanceOf(_msgSender()) >= transactionCostJuice,
+            "not have enough JUICE"
         );
 
         _createUpgrades(_qty, _level, _msgSender());
@@ -251,18 +251,18 @@ contract Upgrade is ERC721Enumerable, Ownable, Pausable {
             _msgSender(),
             (transactionCostHotDog * (100 - LP_TAX_PERCENT)) / 100
         );
-        soda.burn(
+        juice.burn(
             _msgSender(),
-            (transactionCostSoda * (100 - LP_TAX_PERCENT)) / 100
+            (transactionCostJuice * (100 - LP_TAX_PERCENT)) / 100
         );
 
         hotDog.transferForUpgradesFees(
             _msgSender(),
             (transactionCostHotDog * LP_TAX_PERCENT) / 100
         );
-        soda.transferForUpgradesFees(
+        juice.transferForUpgradesFees(
             _msgSender(),
-            (transactionCostSoda * LP_TAX_PERCENT) / 100
+            (transactionCostJuice * LP_TAX_PERCENT) / 100
         );
     }
 
