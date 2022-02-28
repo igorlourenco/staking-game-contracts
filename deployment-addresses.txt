@@ -11,4 +11,4 @@ JUICE=0xe49f90fb525bC39a9B84FfcCf78F61A759960e75
 // yarn hardhat verify --network avax-testnet 0xe49f90fb525bC39a9B84FfcCf78F61A759960e75 
 
 JuiceFountain=0x23B4E477f9845F62cA8cADb3DC49874904F1c824
-// yarn hardhat verify --network avax-testnet 0xe49f90fb525bC39a9B84FfcCf78F61A759960e75 
+// yarn hardhat verify --network avax-testnet 0x23B4E477f9845F62cA8cADb3DC49874904F1c824 
