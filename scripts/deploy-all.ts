@@ -36,6 +36,14 @@ async function main() {
   await juice.deployed();
 
   console.log("Juice deployed to:", juice.address);
+
+  // deploy JuiceFountain
+  const JuiceFountain = await ethers.getContractFactory("JuiceFountain");
+  const juiceFountain = await JuiceFountain.deploy();
+
+  await juiceFountain.deployed();
+
+  console.log("JuiceFountain deployed to:", juiceFountain.address);
 }
 
 main().catch((error) => {
