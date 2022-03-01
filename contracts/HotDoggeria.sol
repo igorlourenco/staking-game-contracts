@@ -226,7 +226,7 @@ contract HotDoggeria is HotDoggeriaProgression, ReentrancyGuard {
         return
             restingTimeCalculation(
                 foodTruck.getType(_tokenId),
-                foodTruck.MASTER_FOOD_TRUCK_TYPE(),
+                foodTruck.GOLD_FOOD_TRUCK_TYPE(),
                 getFatigueAccruedForFoodTruck(_tokenId, false)
             );
     }
@@ -495,7 +495,7 @@ contract HotDoggeria is HotDoggeriaProgression, ReentrancyGuard {
 
             if (
                 foodTruck.getType(foodTruckId) ==
-                foodTruck.MASTER_FOOD_TRUCK_TYPE()
+                foodTruck.GOLD_FOOD_TRUCK_TYPE()
             ) {
                 numberOfFoodTrucks[owner][1]--;
             } else {
@@ -561,7 +561,7 @@ contract HotDoggeria is HotDoggeriaProgression, ReentrancyGuard {
 
             if (
                 foodTruck.getType(foodTruckId) ==
-                foodTruck.MASTER_FOOD_TRUCK_TYPE()
+                foodTruck.GOLD_FOOD_TRUCK_TYPE()
             ) {
                 numberOfFoodTrucks[owner][1]++;
             } else {
@@ -725,7 +725,7 @@ contract HotDoggeria is HotDoggeriaProgression, ReentrancyGuard {
 
             if (
                 foodTruck.getType(_foodTruckId) ==
-                foodTruck.MASTER_FOOD_TRUCK_TYPE()
+                foodTruck.GOLD_FOOD_TRUCK_TYPE()
             ) {
                 numberOfFoodTrucks[owner][1]++;
             } else {

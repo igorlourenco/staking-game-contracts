@@ -1,8 +1,8 @@
 HOTDOG=0x49207Fcdd39E79253f68c2fD92dDd167E4Bda299
 // yarn hardhat verify --network avax-testnet 0x49207Fcdd39E79253f68c2fD92dDd167E4Bda299 
 
-FoodTruck=0x1d91dD39B3DEfDcC5B77F933b25ec02131Cac63d
-// yarn hardhat verify --network avax-testnet 0x1d91dD39B3DEfDcC5B77F933b25ec02131Cac63d "0x49207Fcdd39E79253f68c2fD92dDd167E4Bda299" "0x50492D9c6B5cEe195fF89fee881b50Ff63F7CaD4" "https://my-nft-minter.vercel.app/metadata"
+FoodTruck=0x022164bf536b5a555acba8f9Acb780C1185516fb
+// yarn hardhat verify --network avax-testnet 0x022164bf536b5a555acba8f9Acb780C1185516fb "0x49207Fcdd39E79253f68c2fD92dDd167E4Bda299" "0x50492D9c6B5cEe195fF89fee881b50Ff63F7CaD4" "https://my-nft-minter.vercel.app/api/metadata"
 
 Freezer=0x237dEcaF67a3c64703577098D5817D7AE60E48D5
 // yarn hardhat verify --network avax-testnet 0x237dEcaF67a3c64703577098D5817D7AE60E48D5 "0x49207Fcdd39E79253f68c2fD92dDd167E4Bda299"

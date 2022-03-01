@@ -32,10 +32,14 @@ contract FoodTruck is ERC721Enumerable, Ownable, Pausable {
     uint256 public constant NUM_GEN1_FOOD_TRUCKS = 10_000;
 
     uint256 public constant FOOD_TRUCK_TYPE = 1;
-    uint256 public constant MASTER_FOOD_TRUCK_TYPE = 2;
+    uint256 public constant GOLD_FOOD_TRUCK_TYPE = 2;
+    uint256 public constant DIAMOND_FOOD_TRUCK_TYPE = 3;
+    uint256 public constant SPECIAL_FOOD_TRUCK_TYPE = 4;
 
     uint256 public constant FOOD_TRUCK_YIELD = 1;
-    uint256 public constant MASTER_FOOD_TRUCK_YIELD = 3;
+    uint256 public constant GOLD_FOOD_TRUCK_YIELD = 3;
+    uint256 public constant DIAMOND_FOOD_TRUCK_YIELD = 6;
+    uint256 public constant SPECIAL_FOOD_TRUCK_YIELD = 9;
 
     uint256 public constant PROMOTIONAL_FOOD_TRUCKS = 50;
 
@@ -99,7 +103,9 @@ contract FoodTruck is ERC721Enumerable, Ownable, Pausable {
 
         // initialize token yield values for each foodTruck type
         typeYields[FOOD_TRUCK_TYPE] = FOOD_TRUCK_YIELD;
-        typeYields[MASTER_FOOD_TRUCK_TYPE] = MASTER_FOOD_TRUCK_YIELD;
+        typeYields[GOLD_FOOD_TRUCK_TYPE] = GOLD_FOOD_TRUCK_YIELD;
+        typeYields[DIAMOND_FOOD_TRUCK_TYPE] = DIAMOND_FOOD_TRUCK_YIELD;
+        typeYields[SPECIAL_FOOD_TRUCK_TYPE] = SPECIAL_FOOD_TRUCK_YIELD;
     }
 
     // VIEWS
@@ -278,7 +284,9 @@ contract FoodTruck is ERC721Enumerable, Ownable, Pausable {
         );
         require(
             foodTruckType == FOOD_TRUCK_TYPE ||
-                foodTruckType == MASTER_FOOD_TRUCK_TYPE,
+                foodTruckType == GOLD_FOOD_TRUCK_TYPE ||
+                foodTruckType == DIAMOND_FOOD_TRUCK_TYPE ||
+                foodTruckType == SPECIAL_FOOD_TRUCK_TYPE,
             "invalid foodTruck type"
         );
 
@@ -303,7 +311,9 @@ contract FoodTruck is ERC721Enumerable, Ownable, Pausable {
         );
         require(
             foodTruckType == FOOD_TRUCK_TYPE ||
-                foodTruckType == MASTER_FOOD_TRUCK_TYPE,
+                foodTruckType == GOLD_FOOD_TRUCK_TYPE ||
+                foodTruckType == DIAMOND_FOOD_TRUCK_TYPE ||
+                foodTruckType == SPECIAL_FOOD_TRUCK_TYPE,
             "invalid foodTruck type"
         );
 
