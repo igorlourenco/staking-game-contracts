@@ -260,24 +260,31 @@ contract FoodTruck is ERC721Enumerable, Ownable, Pausable {
      * - Once the mint is finished, it is provable that this randomness was not tampered with by providing the seed
      * - Food Truck type can be set only once
      */
-    function setFoodTruckType(uint256 tokenId) external {
+    function setFoodTruckType(uint256[] calldata _foodTruckIds) external {
         require(
-            tokenTypes[tokenId] == 0,
-            "that token's type has already been set"
+            _foodTruckIds.length <= 10,
+            "you can reveal only 10 food trucks at a time"
         );
+        for (uint256 i = 0; i < _foodTruckIds.length; i++) {
+            uint256 tokenId = _foodTruckIds[i];
+            require(
+                tokenTypes[tokenId] == 0,
+                "that token's type has already been set"
+            );
 
-        uint256 points = random(101);
-        if (points <= 89) {
-            tokenTypes[tokenId] = FOOD_TRUCK_TYPE;
-            emit onFoodTruckRevealed(tokenId, FOOD_TRUCK_TYPE);
-        }
-        if (points > 89 && points <= 99) {
-            tokenTypes[tokenId] = GOLD_FOOD_TRUCK_TYPE;
-            emit onFoodTruckRevealed(tokenId, GOLD_FOOD_TRUCK_TYPE);
-        }
-        if (points == 100) {
-            tokenTypes[tokenId] = DIAMOND_FOOD_TRUCK_TYPE;
-            emit onFoodTruckRevealed(tokenId, DIAMOND_FOOD_TRUCK_TYPE);
+            uint256 points = random(101);
+            if (points <= 89) {
+                tokenTypes[tokenId] = FOOD_TRUCK_TYPE;
+                emit onFoodTruckRevealed(tokenId, FOOD_TRUCK_TYPE);
+            }
+            if (points > 89 && points <= 99) {
+                tokenTypes[tokenId] = GOLD_FOOD_TRUCK_TYPE;
+                emit onFoodTruckRevealed(tokenId, GOLD_FOOD_TRUCK_TYPE);
+            }
+            if (points == 100) {
+                tokenTypes[tokenId] = DIAMOND_FOOD_TRUCK_TYPE;
+                emit onFoodTruckRevealed(tokenId, DIAMOND_FOOD_TRUCK_TYPE);
+            }
         }
     }
 
