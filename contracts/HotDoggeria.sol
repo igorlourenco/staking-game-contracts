@@ -14,7 +14,7 @@ contract HotDoggeria is HotDoggeriaProgression, ReentrancyGuard {
     using SafeMath for uint256;
 
     // Constants
-    uint256 public constant YIELD_PPS = 16666666666666667; // HotDog cooked per second per unit of yield
+    uint256 public constant YIELD_HDPS = 16666666666666667; // HotDog cooked per second per unit of yield
     uint256 public constant CLAIM_HOTDOG_CONTRIBUTION_PERCENTAGE = 10;
     uint256 public constant CLAIM_HOTDOG_BURN_PERCENTAGE = 10;
     uint256 public constant MAX_FATIGUE = 100000000000000;
@@ -50,7 +50,7 @@ contract HotDoggeria is HotDoggeriaProgression, ReentrancyGuard {
     mapping(uint256 => uint256) private foodTruckFatigue; // tokenId => fatigue
     mapping(uint256 => uint256) private foodTruckHotDog; // tokenId => hotDog
 
-    mapping(address => uint256[2]) private numberOfFoodTrucks; // address => [number of regular food trucks, number of master food trucks]
+    mapping(address => uint256[4]) private numberOfFoodTrucks; // address => [number of regular food trucks, number of master food trucks]
     mapping(address => uint256) private totalHDPM; // address => total HDPM
 
     struct StakedUpgrade {
@@ -124,12 +124,28 @@ contract HotDoggeria is HotDoggeriaProgression, ReentrancyGuard {
         return fatiguePerMinute[_owner].mul(fatigueSkillModifier).div(100);
     }
 
-    function _getMasterFoodTruckNumber(address _owner)
+    function _getGoldFoodTruckNumber(address _owner)
         internal
         view
         returns (uint256)
     {
         return numberOfFoodTrucks[_owner][1];
+    }
+
+    function _getDiamondFoodTruckNumber(address _owner)
+        internal
+        view
+        returns (uint256)
+    {
+        return numberOfFoodTrucks[_owner][2];
+    }
+
+    function _getSpecialFoodTruckNumber(address _owner)
+        internal
+        view
+        returns (uint256)
+    {
+        return numberOfFoodTrucks[_owner][3];
     }
 
     /**
@@ -260,13 +276,13 @@ contract HotDoggeria is HotDoggeriaProgression, ReentrancyGuard {
 
         uint256 a = (_deltaTime *
             _hdpm *
-            YIELD_PPS *
+            YIELD_HDPS *
             _modifier *
             (MAX_FATIGUE - _fatigue)) / (100 * MAX_FATIGUE);
         uint256 b = (_deltaTime *
             _deltaTime *
             _hdpm *
-            YIELD_PPS *
+            YIELD_HDPS *
             _modifier *
             _fatiguePerMinute) / (100 * 2 * 60 * MAX_FATIGUE);
         if (a > b) {
@@ -276,12 +292,45 @@ contract HotDoggeria is HotDoggeriaProgression, ReentrancyGuard {
         return _initialHotDog;
     }
 
+    function _getModifier(address _owner, uint256 _foodTruckType)
+        internal
+        view
+        returns (uint256)
+    {
+        uint256 goldFoodTruckSkillModifier = getFoodTruckSkillModifier(
+            _owner,
+            _getGoldFoodTruckNumber(_owner)
+        );
+
+        uint256 diamondFoodTruckSkillModifier = getFoodTruckSkillModifier(
+            _owner,
+            _getDiamondFoodTruckNumber(_owner)
+        );
+
+        uint256 specialFoodTruckSkillModifier = getFoodTruckSkillModifier(
+            _owner,
+            _getSpecialFoodTruckNumber(_owner)
+        );
+
+        if (_foodTruckType == foodTruck.DIAMOND_FOOD_TRUCK_TYPE()) {
+            return diamondFoodTruckSkillModifier;
+        } else if (_foodTruckType == foodTruck.SPECIAL_FOOD_TRUCK_TYPE()) {
+            return specialFoodTruckSkillModifier;
+        } else if (_foodTruckType == foodTruck.GOLD_FOOD_TRUCK_TYPE()) {
+            return goldFoodTruckSkillModifier;
+        } else {
+            return 100;
+        }
+    }
+
     function _getHotDogAccruedForFoodTruck(
         uint256 _tokenId,
         bool checkOwnership
     ) internal view returns (uint256) {
         StakedFoodTruck memory stakedFoodTruck = stakedFoodTrucks[_tokenId];
         address owner = stakedFoodTruck.owner;
+        uint256 foodTruckType = foodTruck.getType(_tokenId);
+
         require(stakedFoodTruck.staked, "This token isn't staked");
         if (checkOwnership) {
             require(owner == _msgSender(), "You don't own this token");
@@ -309,19 +358,15 @@ contract HotDoggeria is HotDoggeriaProgression, ReentrancyGuard {
             hdpm += upgrade.getYield(upgradeId);
         }
 
-        uint256 masterFoodTruckSkillModifier = getMasterFoodTruckSkillModifier(
-            owner,
-            _getMasterFoodTruckNumber(owner)
-        );
-
         uint256 delta = endTimestamp - stakedFoodTruck.startTimestamp;
+        uint256 _modifier = _getModifier(owner, foodTruckType);
 
         return
             hotDogAccruedCalculation(
                 foodTruckHotDog[_tokenId],
                 delta,
                 hdpm,
-                masterFoodTruckSkillModifier,
+                _modifier,
                 foodTruckFatigueLastUpdate,
                 getFatiguePerMinuteWithModifier(owner)
             );
@@ -498,6 +543,18 @@ contract HotDoggeria is HotDoggeriaProgression, ReentrancyGuard {
                 foodTruck.GOLD_FOOD_TRUCK_TYPE()
             ) {
                 numberOfFoodTrucks[owner][1]--;
+            }
+            if (
+                foodTruck.getType(foodTruckId) ==
+                foodTruck.DIAMOND_FOOD_TRUCK_TYPE()
+            ) {
+                numberOfFoodTrucks[owner][2]--;
+            }
+            if (
+                foodTruck.getType(foodTruckId) ==
+                foodTruck.SPECIAL_FOOD_TRUCK_TYPE()
+            ) {
+                numberOfFoodTrucks[owner][3]--;
             } else {
                 numberOfFoodTrucks[owner][0]--;
             }

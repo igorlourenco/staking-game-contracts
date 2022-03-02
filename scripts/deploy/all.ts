@@ -13,7 +13,6 @@ async function main() {
   const FoodTruck = await ethers.getContractFactory("FoodTruck");
   const foodTruck = await FoodTruck.deploy(
     hotDog.address,
-    "0x50492D9c6B5cEe195fF89fee881b50Ff63F7CaD4",
     "https://my-nft-minter.vercel.app/metadata/foodtruck"
   );
 

@@ -34,11 +34,13 @@ contract HotDoggeriaProgression is Context, Ownable, Pausable {
     uint256 public constant BURN_ID = 0;
     uint256 public constant FATIGUE_ID = 1;
     uint256 public constant FREEZER_ID = 2;
-    uint256 public constant MASTER_FOOD_TRUCK_ID = 3;
+    uint256 public constant GOLD_FOOD_TRUCK_ID = 3;
     uint256 public constant UPGRADES_ID = 4;
     uint256 public constant FOOD_TRUCKS_ID = 5;
+    uint256 public constant DIAMOND_FOOD_TRUCK_ID = 6;
+    uint256 public constant SPECIAL_FOOD_TRUCK_ID = 7;
     uint256 public constant BASE_COST_RESPEC = 50 * 1e18;
-    uint256[6] public MAX_SKILL_LEVEL = [3, 3, 2, 2, 5, 5];
+    uint256[8] public MAX_SKILL_LEVEL = [3, 3, 2, 2, 5, 5, 6, 7];
 
     Juice public juice;
 
@@ -46,7 +48,7 @@ contract HotDoggeriaProgression is Context, Ownable, Pausable {
 
     mapping(address => uint256) public juiceDeposited; // address => total amount of juice deposited
     mapping(address => uint256) public skillPoints; // address => skill points available
-    mapping(address => uint256[6]) public skillsLearned; // address => skill learned.
+    mapping(address => uint256[8]) public skillsLearned; // address => skill learned.
 
     constructor(Juice _juice) {
         juice = _juice;
@@ -138,17 +140,25 @@ contract HotDoggeriaProgression is Context, Ownable, Pausable {
     /**
      * Returns the multiplier for $PIZZA production based on the number of masterchefs and the skill points spent
      */
-    function getMasterFoodTruckSkillModifier(
+    function getFoodTruckSkillModifier(
         address _owner,
         uint256 _masterFoodTruckNumber
     ) public view returns (uint256) {
-        uint256 masterFoodTruckSkill = skillsLearned[_owner][
-            MASTER_FOOD_TRUCK_ID
+        uint256 goldFoodTruckSkill = skillsLearned[_owner][GOLD_FOOD_TRUCK_ID];
+        uint256 diamondFoodTruckSkill = skillsLearned[_owner][
+            DIAMOND_FOOD_TRUCK_ID
+        ];
+        uint256 specialFoodTruckSkill = skillsLearned[_owner][
+            SPECIAL_FOOD_TRUCK_ID
         ];
 
-        if (masterFoodTruckSkill == 2 && _masterFoodTruckNumber >= 5) {
+        if (goldFoodTruckSkill == 2 && _masterFoodTruckNumber >= 5) {
             return 110;
-        } else if (masterFoodTruckSkill >= 1 && _masterFoodTruckNumber >= 2) {
+        } else if (diamondFoodTruckSkill == 6 && _masterFoodTruckNumber >= 1) {
+            return 117;
+        } else if (specialFoodTruckSkill == 7 && _masterFoodTruckNumber >= 1) {
+            return 124;
+        } else if (goldFoodTruckSkill >= 1 && _masterFoodTruckNumber >= 2) {
             return 103;
         } else {
             return 100;
@@ -248,17 +258,21 @@ contract HotDoggeriaProgression is Context, Ownable, Pausable {
             uint256 burn,
             uint256 fatigue,
             uint256 freezer,
-            uint256 masterFoodTruck,
+            uint256 goldFoodTruck,
+            uint256 diamondFoodTruck,
+            uint256 specialFoodTruck,
             uint256 upgrades,
             uint256 foodTrucks
         )
     {
-        uint256[6] memory skills = skillsLearned[_owner];
+        uint256[8] memory skills = skillsLearned[_owner];
 
         burn = skills[BURN_ID];
         fatigue = skills[FATIGUE_ID];
         freezer = skills[FREEZER_ID];
-        masterFoodTruck = skills[MASTER_FOOD_TRUCK_ID];
+        goldFoodTruck = skills[GOLD_FOOD_TRUCK_ID];
+        diamondFoodTruck = skills[DIAMOND_FOOD_TRUCK_ID];
+        specialFoodTruck = skills[SPECIAL_FOOD_TRUCK_ID];
         upgrades = skills[UPGRADES_ID];
         foodTrucks = skills[FOOD_TRUCKS_ID];
     }
@@ -335,7 +349,9 @@ contract HotDoggeriaProgression is Context, Ownable, Pausable {
         skillsLearned[_msgSender()][BURN_ID] = 0;
         skillsLearned[_msgSender()][FATIGUE_ID] = 0;
         skillsLearned[_msgSender()][FREEZER_ID] = 0;
-        skillsLearned[_msgSender()][MASTER_FOOD_TRUCK_ID] = 0;
+        skillsLearned[_msgSender()][GOLD_FOOD_TRUCK_ID] = 0;
+        skillsLearned[_msgSender()][DIAMOND_FOOD_TRUCK_ID] = 0;
+        skillsLearned[_msgSender()][SPECIAL_FOOD_TRUCK_ID] = 0;
         skillsLearned[_msgSender()][UPGRADES_ID] = 0;
         skillsLearned[_msgSender()][FOOD_TRUCKS_ID] = 0;
 

@@ -48,12 +48,11 @@ contract FoodTruck is ERC721Enumerable, Ownable, Pausable {
     // external contracts
     HotDog public hotDog;
     address public hotDoggeriaAddress;
-    address public foodTruckTypeOracleAddress;
 
     // metadata URI
     string public BASE_URI;
 
-    // foodTruck type definitions (normal or master?)
+    // foodTruck type definitions (normal, gold, diamond or special?)
     mapping(uint256 => uint256) public tokenTypes; // maps tokenId to its type
     mapping(uint256 => uint256) public typeYields; // maps foodTruck type to yield
 
@@ -84,19 +83,14 @@ contract FoodTruck is ERC721Enumerable, Ownable, Pausable {
     /**
      * requires pizza, foodTruckType oracle address
      * pizza: for liquidity bootstrapping and spending on foodTrucks
-     * foodTruckTypeOracleAddress: external foodTruck generator uses secure RNG
      */
-    constructor(
-        HotDog _hotDog,
-        address _foodTruckTypeOracleAddress,
-        string memory _BASE_URI
-    ) ERC721("HotDog Game FoodTrucks", "HOTDOG-GAME-FOODTRUCK") {
+    constructor(HotDog _hotDog, string memory _BASE_URI)
+        ERC721("Hot Dog Game FoodTrucks", "HOTDOG-GAME-FOODTRUCK")
+    {
         require(address(_hotDog) != address(0));
-        require(_foodTruckTypeOracleAddress != address(0));
 
         // set required contract references
         hotDog = _hotDog;
-        foodTruckTypeOracleAddress = _foodTruckTypeOracleAddress;
 
         // set base uri
         BASE_URI = _BASE_URI;
@@ -184,13 +178,6 @@ contract FoodTruck is ERC721Enumerable, Ownable, Pausable {
         hotDog = HotDog(_hotDog);
     }
 
-    function setFoodTruckTypeOracleAddress(address _foodTruckTypeOracleAddress)
-        external
-        onlyOwner
-    {
-        foodTruckTypeOracleAddress = _foodTruckTypeOracleAddress;
-    }
-
     function setStartTimeWhitelist(uint256 _startTime) external onlyOwner {
         require(
             _startTime >= block.timestamp,
@@ -273,15 +260,36 @@ contract FoodTruck is ERC721Enumerable, Ownable, Pausable {
      * - Once the mint is finished, it is provable that this randomness was not tampered with by providing the seed
      * - Food Truck type can be set only once
      */
-    function setFoodTruckType(uint256 tokenId, uint256 foodTruckType) external {
-        require(
-            _msgSender() == foodTruckTypeOracleAddress,
-            "msgsender does not have permission"
-        );
+    function setFoodTruckType(uint256 tokenId) external {
         require(
             tokenTypes[tokenId] == 0,
             "that token's type has already been set"
         );
+
+        uint256 points = random(101);
+        if (points <= 89) {
+            tokenTypes[tokenId] = FOOD_TRUCK_TYPE;
+            emit onFoodTruckRevealed(tokenId, FOOD_TRUCK_TYPE);
+        }
+        if (points > 89 && points <= 99) {
+            tokenTypes[tokenId] = GOLD_FOOD_TRUCK_TYPE;
+            emit onFoodTruckRevealed(tokenId, GOLD_FOOD_TRUCK_TYPE);
+        }
+        if (points == 100) {
+            tokenTypes[tokenId] = DIAMOND_FOOD_TRUCK_TYPE;
+            emit onFoodTruckRevealed(tokenId, DIAMOND_FOOD_TRUCK_TYPE);
+        }
+    }
+
+    function setSpecialFoodTruckType(uint256 tokenId, uint256 foodTruckType)
+        external
+        onlyOwner
+    {
+        require(
+            tokenTypes[tokenId] == 0,
+            "that token's type has already been set"
+        );
+
         require(
             foodTruckType == FOOD_TRUCK_TYPE ||
                 foodTruckType == GOLD_FOOD_TRUCK_TYPE ||
@@ -324,6 +332,10 @@ contract FoodTruck is ERC721Enumerable, Ownable, Pausable {
                 "that token's type has already been set"
             );
             tokenTypes[foodTrucksMintedPromotional] = foodTruckType;
+            emit onFoodTruckRevealed(
+                foodTrucksMintedPromotional,
+                foodTruckType
+            );
             _createFoodTruck(target, foodTrucksMintedPromotional);
         }
     }
@@ -463,5 +475,18 @@ contract FoodTruck is ERC721Enumerable, Ownable, Pausable {
         }
 
         return foodTrucks;
+    }
+
+    function random(uint256 number) public view returns (uint256) {
+        return
+            uint256(
+                keccak256(
+                    abi.encodePacked(
+                        block.timestamp,
+                        block.difficulty,
+                        msg.sender
+                    )
+                )
+            ) % number;
     }
 }
