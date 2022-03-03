@@ -4,7 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "deploy:all": "yarn hardhat run --network avax-testnet scripts/deploy/all.ts",
+    "deploy:all": "yarn hardhat run --network avax scripts/deploy/all.ts",
     "deploy:hotdog": "yarn hardhat run --network avax-testnet scripts/deploy/hotdog.ts",
     "deploy:foodtruck": "yarn hardhat run --network avax-testnet scripts/deploy/food-truck.ts",
     "deploy:employee": "yarn hardhat run --network avax-testnet scripts/deploy/employee.ts",
