@@ -7,13 +7,12 @@
     "deploy:all": "yarn hardhat run --network avax-testnet scripts/deploy/all.ts",
     "deploy:hotdog": "yarn hardhat run --network avax-testnet scripts/deploy/hotdog.ts",
     "deploy:foodtruck": "yarn hardhat run --network avax-testnet scripts/deploy/food-truck.ts",
-    "deploy:freezer": "yarn hardhat run --network avax-testnet scripts/deploy/freezer.ts",
+    "deploy:employee": "yarn hardhat run --network avax-testnet scripts/deploy/employee.ts",
     "deploy:juice": "yarn hardhat run --network avax-testnet scripts/deploy/juice.ts",
     "deploy:juicefountain": "yarn hardhat run --network avax-testnet scripts/deploy/juice-fountain.ts",
     "deploy:hotdoggeriaprogression": "yarn hardhat run --network avax-testnet scripts/deploy/hot-doggeria-progression.ts",
     "deploy:upgrade": "yarn hardhat run --network avax-testnet scripts/deploy/upgrade.ts",
-	"deploy:hotdoggeria": "yarn hardhat run --network avax-testnet scripts/deploy/hot-doggeria.ts"
-
+    "deploy:hotdoggeria": "yarn hardhat run --network avax-testnet scripts/deploy/hot-doggeria.ts"
   },
   "devDependencies": {
     "@nomiclabs/hardhat-ethers": "^2.0.0",

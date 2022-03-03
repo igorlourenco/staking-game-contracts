@@ -20,13 +20,12 @@ contract FoodTruck is ERC721Enumerable, Ownable, Pausable {
 
     // CONSTANTS
 
-    uint256 public constant FOOD_TRUCK_PRICE_WHITELIST = 1 ether;
+    uint256 public constant FOOD_TRUCK_PRICE_WHITELIST = 1.25 ether;
     uint256 public constant FOOD_TRUCK_PRICE_AVAX = 1.5 ether;
 
-    uint256 public constant WHITELIST_FOOD_TRUCKS = 1000;
     uint256 public constant FOOD_TRUCKS_PER_HOTDOG_MINT_LEVEL = 5000;
 
-    uint256 public constant MAXIMUM_MINTS_PER_WHITELIST_ADDRESS = 4;
+    uint256 public constant MAXIMUM_MINTS_PER_WHITELIST_ADDRESS = 10;
 
     uint256 public constant NUM_GEN0_FOOD_TRUCKS = 10_000;
     uint256 public constant NUM_GEN1_FOOD_TRUCKS = 10_000;
@@ -41,7 +40,7 @@ contract FoodTruck is ERC721Enumerable, Ownable, Pausable {
     uint256 public constant DIAMOND_FOOD_TRUCK_YIELD = 6;
     uint256 public constant SPECIAL_FOOD_TRUCK_YIELD = 9;
 
-    uint256 public constant PROMOTIONAL_FOOD_TRUCKS = 50;
+    uint256 public constant PROMOTIONAL_FOOD_TRUCKS = 20;
 
     // VAR
 
@@ -61,7 +60,7 @@ contract FoodTruck is ERC721Enumerable, Ownable, Pausable {
     uint256 public foodTrucksMintedWithHOTDOG;
     uint256 public foodTrucksMintedWhitelist;
     uint256 public foodTrucksMintedPromotional;
-    uint256 public foodTrucksMinted = 50; // First 50 ids are reserved for the promotional foodTrucks
+    uint256 public foodTrucksMinted = 20; // First 50 ids are reserved for the promotional foodTrucks
 
     // mint control timestamps
     uint256 public startTimeWhitelist;
@@ -145,10 +144,7 @@ contract FoodTruck is ERC721Enumerable, Ownable, Pausable {
             _exists(tokenId),
             "ERC721Metadata: URI query for nonexistent token"
         );
-        return
-            string(
-                abi.encodePacked(_baseURI(), "/", tokenId.toString(), ".json")
-            );
+        return string(abi.encodePacked(_baseURI(), "/", tokenId.toString()));
     }
 
     // override
@@ -371,16 +367,19 @@ contract FoodTruck is ERC721Enumerable, Ownable, Pausable {
         // check more advanced requirements
         require(
             qty > 0 && qty <= MAXIMUM_MINTS_PER_WHITELIST_ADDRESS,
-            "quantity must be between 1 and 4"
+            "quantity must be between 1 and 10"
         );
-        require(
-            (foodTrucksMintedWhitelist + qty) <= WHITELIST_FOOD_TRUCKS,
-            "you can't mint that many right now"
-        );
+
         require(
             (whitelistClaimed[_msgSender()] + qty) <=
                 MAXIMUM_MINTS_PER_WHITELIST_ADDRESS,
             "this address can't mint any more whitelist foodTrucks"
+        );
+
+        require(
+            (foodTrucksMintedWhitelist + qty) <=
+                (NUM_GEN0_FOOD_TRUCKS - PROMOTIONAL_FOOD_TRUCKS),
+            "you can't mint that many right now"
         );
 
         // check price

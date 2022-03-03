@@ -9,24 +9,41 @@ async function main() {
 
   console.log("HotDog deployed to:", hotDog.address);
 
+  //   await hre.run("verify:verify", {
+  //     address: hotDog.address,
+  //   });
+
   // deploy Food Truck
   const FoodTruck = await ethers.getContractFactory("FoodTruck");
   const foodTruck = await FoodTruck.deploy(
     hotDog.address,
-    "https://my-nft-minter.vercel.app/metadata/foodtruck"
+    "https://my-nft-minter.vercel.app/api/metadata"
   );
 
   await foodTruck.deployed();
 
   console.log("FoodTruck deployed to:", foodTruck.address);
 
-  // deploy Freezer
-  const Freezer = await ethers.getContractFactory("Freezer");
-  const freezer = await Freezer.deploy(hotDog.address);
+  //   await hre.run("verify:verify", {
+  //     address: foodTruck.address,
+  //     constructorArguments: [
+  //       hotDog.address,
+  //       "https://my-nft-minter.vercel.app/api/metadata",
+  //     ],
+  //   });
 
-  await freezer.deployed();
+  // deploy Employee
+  const Employee = await ethers.getContractFactory("Employee");
+  const employee = await Employee.deploy(hotDog.address);
 
-  console.log("Freezer deployed to:", freezer.address);
+  await employee.deployed();
+
+  console.log("Employee deployed to:", employee.address);
+
+  //   await hre.run("verify:verify", {
+  //     address: employee.address,
+  //     constructorArguments: [hotDog.address],
+  //   });
 
   // deploy Juice
   const Juice = await ethers.getContractFactory("Juice");
@@ -36,6 +53,10 @@ async function main() {
 
   console.log("Juice deployed to:", juice.address);
 
+  //   await hre.run("verify:verify", {
+  //     address: juice.address,
+  //   });
+
   // deploy JuiceFountain
   const JuiceFountain = await ethers.getContractFactory("JuiceFountain");
   const juiceFountain = await JuiceFountain.deploy();
@@ -43,6 +64,10 @@ async function main() {
   await juiceFountain.deployed();
 
   console.log("JuiceFountain deployed to:", juiceFountain.address);
+
+  //   await hre.run("verify:verify", {
+  //     address: juiceFountain.address,
+  //   });
 
   // deploy HotDoggeriaProgression
   const HotDoggeriaProgression = await ethers.getContractFactory(
@@ -59,17 +84,31 @@ async function main() {
     hotDoggeriaProgression.address
   );
 
+  //   await hre.run("verify:verify", {
+  //     address: hotDoggeriaProgression.address,
+  //     constructorArguments: [juice.address],
+  //   });
+
   // deploy Upgrade
   const Upgrade = await ethers.getContractFactory("Upgrade");
   const upgrade = await Upgrade.deploy(
     hotDog.address,
     juice.address,
-    "https://my-nft-minter.vercel.app/metadata/upgrade"
+    "https://my-nft-minter.vercel.app/api/metadata/upgrade"
   );
 
   await upgrade.deployed();
 
   console.log("Upgrade deployed to:", upgrade.address);
+
+  //   await hre.run("verify:verify", {
+  //     address: upgrade.address,
+  //     constructorArguments: [
+  //       hotDog.address,
+  //       juice.address,
+  //       "https://my-nft-minter.vercel.app/api/metadata/upgrade",
+  //     ],
+  //   });
 
   // deploy HotDoggeria
   const HotDoggeria = await ethers.getContractFactory("HotDoggeria");
@@ -78,10 +117,21 @@ async function main() {
     upgrade.address,
     hotDog.address,
     juice.address,
-    freezer.address
+    employee.address
   );
 
   await hotDoggeria.deployed();
+
+  //   await hre.run("verify:verify", {
+  //     address: hotDoggeria.address,
+  //     constructorArguments: [
+  //       foodTruck.address,
+  //       upgrade.address,
+  //       hotDog.address,
+  //       juice.address,
+  //       employee.address,
+  //     ],
+  //   });
 
   console.log("HotDoggeria deployed to:", hotDoggeria.address);
 }

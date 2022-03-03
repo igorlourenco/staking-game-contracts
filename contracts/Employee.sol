@@ -9,7 +9,7 @@ import "@openzeppelin/contracts/security/Pausable.sol";
 
 import "./HotDog.sol";
 
-contract Freezer is ERC20("Staked HotDog", "sHOTDOG"), Ownable, Pausable {
+contract Employee is ERC20("Staked HotDog", "sHOTDOG"), Ownable, Pausable {
     using SafeERC20 for HotDog;
     using SafeMath for uint256;
 
@@ -58,11 +58,11 @@ contract Freezer is ERC20("Staked HotDog", "sHOTDOG"), Ownable, Pausable {
             _mint(_msgSender(), share);
         }
 
-        hotDog.transferToFreezer(_msgSender(), _amount);
+        hotDog.transferToEmployee(_msgSender(), _amount);
     }
 
     function quickUnstake(uint256 _share) external whenNotPaused {
-        // QUICK_UNSTAKE_CONTRIBUTION_PERCENT of the claimable HOTDOG will remain in the freezer
+        // QUICK_UNSTAKE_CONTRIBUTION_PERCENT of the claimable HOTDOG will remain in the employee
         // the rest is transfered to the staker
         uint256 unstakeOutput = _unstakeOutput(_share);
         uint256 output = unstakeOutput

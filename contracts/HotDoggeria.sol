@@ -89,19 +89,19 @@ contract HotDoggeria is HotDoggeriaProgression, ReentrancyGuard {
     FoodTruck public foodTruck;
     Upgrade public upgrade;
     HotDog public hotDog;
-    address public freezerAddress;
+    address public employeeAddress;
 
     constructor(
         FoodTruck _foodTruck,
         Upgrade _upgrade,
         HotDog _hotDog,
         Juice _juice,
-        address _freezerAddress
+        address _employeeAddress
     ) HotDoggeriaProgression(_juice) {
         foodTruck = _foodTruck;
         upgrade = _upgrade;
         hotDog = _hotDog;
-        freezerAddress = _freezerAddress;
+        employeeAddress = _employeeAddress;
     }
 
     // Views
@@ -455,7 +455,7 @@ contract HotDoggeria is HotDoggeriaProgression, ReentrancyGuard {
     function _claimHotDog(address _owner) internal {
         uint256 totalClaimed = 0;
 
-        uint256 freezerSkillModifier = getFreezerSkillModifier(_owner);
+        uint256 employeeSkillModifier = getEmployeeSkillModifier(_owner);
         uint256 burnSkillModifier = getBurnSkillModifier(_owner);
 
         uint256 foodTruckBalance = ownedFoodTruckStakesBalance[_owner];
@@ -475,16 +475,16 @@ contract HotDoggeria is HotDoggeriaProgression, ReentrancyGuard {
             stakedFoodTrucks[foodTruckId].startTimestamp = block.timestamp;
         }
 
-        uint256 taxAmountFreezer = (totalClaimed *
-            (CLAIM_HOTDOG_CONTRIBUTION_PERCENTAGE - freezerSkillModifier)) /
+        uint256 taxAmountEmployee = (totalClaimed *
+            (CLAIM_HOTDOG_CONTRIBUTION_PERCENTAGE - employeeSkillModifier)) /
             100;
         uint256 taxAmountBurn = (totalClaimed *
             (CLAIM_HOTDOG_BURN_PERCENTAGE - burnSkillModifier)) / 100;
 
-        totalClaimed = totalClaimed - taxAmountFreezer - taxAmountBurn;
+        totalClaimed = totalClaimed - taxAmountEmployee - taxAmountBurn;
 
         hotDog.mint(_msgSender(), totalClaimed);
-        hotDog.mint(freezerAddress, taxAmountFreezer);
+        hotDog.mint(employeeAddress, taxAmountEmployee);
     }
 
     function claimHotDog() public nonReentrant whenNotPaused {

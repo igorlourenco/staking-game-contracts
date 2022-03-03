@@ -119,15 +119,7 @@ contract Upgrade is ERC721Enumerable, Ownable, Pausable {
             "ERC721Metadata: URI query for nonexistent token"
         );
         uint256 levelFixed = tokenLevel[_tokenId] + 1;
-        return
-            string(
-                abi.encodePacked(
-                    _baseURI(),
-                    "/",
-                    levelFixed.toString(),
-                    ".json"
-                )
-            );
+        return string(abi.encodePacked(_baseURI(), "/", levelFixed.toString()));
     }
 
     function isApprovedForAll(address _owner, address _operator)

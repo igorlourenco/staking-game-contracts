@@ -33,7 +33,7 @@ contract HotDoggeriaProgression is Context, Ownable, Pausable {
     uint256 public MAX_JUICE_AMOUNT = JUICE_LEVELS[JUICE_LEVELS.length - 1];
     uint256 public constant BURN_ID = 0;
     uint256 public constant FATIGUE_ID = 1;
-    uint256 public constant FREEZER_ID = 2;
+    uint256 public constant EMPLOYEE_ID = 2;
     uint256 public constant GOLD_FOOD_TRUCK_ID = 3;
     uint256 public constant UPGRADES_ID = 4;
     uint256 public constant FOOD_TRUCKS_ID = 5;
@@ -119,18 +119,18 @@ contract HotDoggeriaProgression is Context, Ownable, Pausable {
     }
 
     /**
-     * Returns a value representing the % that will be reduced from the freezer share of the claim
+     * Returns a value representing the % that will be reduced from the employee share of the claim
      */
-    function getFreezerSkillModifier(address _owner)
+    function getEmployeeSkillModifier(address _owner)
         public
         view
         returns (uint256)
     {
-        uint256 freezerSkill = skillsLearned[_owner][FREEZER_ID];
+        uint256 employeeSkill = skillsLearned[_owner][EMPLOYEE_ID];
 
-        if (freezerSkill == 2) {
+        if (employeeSkill == 2) {
             return 9;
-        } else if (freezerSkill == 1) {
+        } else if (employeeSkill == 1) {
             return 4;
         } else {
             return 0;
@@ -257,7 +257,7 @@ contract HotDoggeriaProgression is Context, Ownable, Pausable {
         returns (
             uint256 burn,
             uint256 fatigue,
-            uint256 freezer,
+            uint256 employee,
             uint256 goldFoodTruck,
             uint256 diamondFoodTruck,
             uint256 specialFoodTruck,
@@ -269,7 +269,7 @@ contract HotDoggeriaProgression is Context, Ownable, Pausable {
 
         burn = skills[BURN_ID];
         fatigue = skills[FATIGUE_ID];
-        freezer = skills[FREEZER_ID];
+        employee = skills[EMPLOYEE_ID];
         goldFoodTruck = skills[GOLD_FOOD_TRUCK_ID];
         diamondFoodTruck = skills[DIAMOND_FOOD_TRUCK_ID];
         specialFoodTruck = skills[SPECIAL_FOOD_TRUCK_ID];
@@ -348,7 +348,7 @@ contract HotDoggeriaProgression is Context, Ownable, Pausable {
 
         skillsLearned[_msgSender()][BURN_ID] = 0;
         skillsLearned[_msgSender()][FATIGUE_ID] = 0;
-        skillsLearned[_msgSender()][FREEZER_ID] = 0;
+        skillsLearned[_msgSender()][EMPLOYEE_ID] = 0;
         skillsLearned[_msgSender()][GOLD_FOOD_TRUCK_ID] = 0;
         skillsLearned[_msgSender()][DIAMOND_FOOD_TRUCK_ID] = 0;
         skillsLearned[_msgSender()][SPECIAL_FOOD_TRUCK_ID] = 0;

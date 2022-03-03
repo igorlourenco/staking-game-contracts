@@ -11,7 +11,7 @@ contract HotDog is ERC20("HotDog", "HOTDOG"), Ownable {
 
     uint256 public NUM_HOTDOG_AVAX_LP = 30_000_000;
 
-    address public freezerAddress;
+    address public employeeAddress;
     address public hotDoggeriaAddress;
     address public foodTruckAddress;
     address public upgradeAddress;
@@ -32,8 +32,8 @@ contract HotDog is ERC20("HotDog", "HOTDOG"), Ownable {
         hotDoggeriaAddress = _hotDoggeriaAddress;
     }
 
-    function setFreezerAddress(address _freezerAddress) external onlyOwner {
-        freezerAddress = _freezerAddress;
+    function setEmployeeAddress(address _employeeAddress) external onlyOwner {
+        employeeAddress = _employeeAddress;
     }
 
     function setUpgradeAddress(address _upgradeAddress) external onlyOwner {
@@ -86,7 +86,7 @@ contract HotDog is ERC20("HotDog", "HOTDOG"), Ownable {
         require(
             hotDoggeriaAddress != address(0) &&
                 foodTruckAddress != address(0) &&
-                freezerAddress != address(0) &&
+                employeeAddress != address(0) &&
                 upgradeAddress != address(0),
             "missing initial requirements"
         );
@@ -100,26 +100,26 @@ contract HotDog is ERC20("HotDog", "HOTDOG"), Ownable {
     function burn(address _from, uint256 _amount) external {
         require(
             foodTruckAddress != address(0) &&
-                freezerAddress != address(0) &&
+                employeeAddress != address(0) &&
                 upgradeAddress != address(0),
             "missing initial requirements"
         );
         require(
             _msgSender() == foodTruckAddress ||
-                _msgSender() == freezerAddress ||
+                _msgSender() == employeeAddress ||
                 _msgSender() == upgradeAddress,
             "msgsender does not have permission"
         );
         _burn(_from, _amount);
     }
 
-    function transferToFreezer(address _from, uint256 _amount) external {
-        require(freezerAddress != address(0), "missing initial requirements");
+    function transferToEmployee(address _from, uint256 _amount) external {
+        require(employeeAddress != address(0), "missing initial requirements");
         require(
-            _msgSender() == freezerAddress,
-            "only the freezer contract can call transferToFreezer"
+            _msgSender() == employeeAddress,
+            "only the employee contract can call transferToEmployee"
         );
-        _transfer(_from, freezerAddress, _amount);
+        _transfer(_from, employeeAddress, _amount);
     }
 
     function transferForUpgradesFees(address _from, uint256 _amount) external {
