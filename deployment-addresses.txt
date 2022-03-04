@@ -1,8 +1,10 @@
 HOTDOG=0xF2CA93426702Aa76885FE03169326c4fdD2E6Ca2
-// yarn hardhat verify --network avax-testnet 0xF2CA93426702Aa76885FE03169326c4fdD2E6Ca2 
+HOTDOG_PROJ=0xC0D35EB11Ef1e191d6c661808F579572Dc14cD5D
+// yarn hardhat verify --network avax-testnet 0xC0D35EB11Ef1e191d6c661808F579572Dc14cD5D 
 
 FoodTruck=0x2342B5b89FE08C82319A9d1b5B2d07D3a542a324
-// yarn hardhat verify --network avax-testnet 0x2342B5b89FE08C82319A9d1b5B2d07D3a542a324 "0xF2CA93426702Aa76885FE03169326c4fdD2E6Ca2" "https://hot-dog-app.vercel.app/api/metadata"
+FoodTruck_PROJ=0x7CFcE9Ab543917AcC25a5BDF35287F2767b822fd
+// yarn hardhat verify --network avax-testnet 0x7CFcE9Ab543917AcC25a5BDF35287F2767b822fd "0xC0D35EB11Ef1e191d6c661808F579572Dc14cD5D" "https://hot-dog-app.vercel.app/api/metadata"
 
 Employee=0xc3093F7A88404991eD3842Fb6D2bfC8cC00C1f09
 // yarn hardhat verify --network avax-testnet 0xc3093F7A88404991eD3842Fb6D2bfC8cC00C1f09 "0x49207Fcdd39E79253f68c2fD92dDd167E4Bda299"
