@@ -138,7 +138,7 @@ contract HotDoggeriaProgression is Context, Ownable, Pausable {
     }
 
     /**
-     * Returns the multiplier for $PIZZA production based on the number of masterchefs and the skill points spent
+     * Returns the multiplier for $HOTDOG production based on the number of masterchefs and the skill points spent
      */
     function getFoodTruckSkillModifier(
         address _owner,
